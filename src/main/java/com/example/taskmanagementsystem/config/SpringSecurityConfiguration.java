@@ -54,7 +54,8 @@ public class SpringSecurityConfiguration {
                         .requestMatchers(
                                 "/api/v1/accounts/login/",
                                 "/api/v1/accounts/logout/",
-                                "/api/v1/accounts/register/"
+                                "/api/v1/accounts/register/",
+                                "/api/v1/accounts/refresh-token/"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))

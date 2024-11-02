@@ -4,9 +4,13 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
+import com.example.taskmanagementsystem.domain.dto.responses.JwtAuthenticationResponse;
 import com.example.taskmanagementsystem.domain.models.jpa.UserEntity;
+import com.example.taskmanagementsystem.domain.models.redis.JwtTokenRedisHash;
+import com.example.taskmanagementsystem.repo.JwtTokenRepository;
 import com.example.taskmanagementsystem.services.JwtService;
 import com.auth0.jwt.algorithms.Algorithm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -17,7 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
+    private final JwtTokenRepository jwtTokenRepository;
     @Value("${token.signing.key}")
     private String jwtSigningKey;
     @Value("${application.security.jwt.expiration}")
@@ -60,6 +66,28 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String extract(String token, String value) {
         return getPayload(token).get(value).asString();
+    }
+
+    @Override
+    public JwtAuthenticationResponse generateTokenResponse(UserEntity user) {
+        String accessToken = generateAccessToken(user);
+        String refreshToken = generateRefreshToken(user);
+        jwtTokenRepository.save(new JwtTokenRedisHash(
+                accessToken,
+                jwtExpiration,
+                user.getEmail(),
+                "ACCESS"
+        ));
+        jwtTokenRepository.save(new JwtTokenRedisHash(
+                refreshToken,
+                jwtRefreshExpiration,
+                user.getEmail(),
+                "REFRESH"
+        ));
+        return new JwtAuthenticationResponse(
+                accessToken,
+                refreshToken
+        );
     }
 
     private Map<String, Claim> getPayload(String token){
