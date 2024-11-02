@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd"
         objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
-    <changeSet id="1730456620857-1" author="Сергей">
+    <changeSet id="1730524551531-1" author="Сергей">
         <createTable tableName="user_entity">
             <column name="email" type="VARCHAR(255)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_entity"/>
@@ -17,6 +17,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_login" type="DATETIME">
                 <constraints nullable="false"/>
             </column>
         </createTable>

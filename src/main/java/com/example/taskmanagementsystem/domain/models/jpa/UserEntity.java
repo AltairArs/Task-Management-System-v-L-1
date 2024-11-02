@@ -1,4 +1,4 @@
-package com.example.taskmanagementsystem.domain.models;
+package com.example.taskmanagementsystem.domain.models.jpa;
 
 import com.example.taskmanagementsystem.enums.UserRoleEnum;
 import jakarta.persistence.*;
@@ -34,6 +34,10 @@ public class UserEntity implements UserDetails {
     @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm", iso = DateTimeFormat.ISO.DATE_TIME)
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm", iso = DateTimeFormat.ISO.DATE_TIME)
+    @Column(name = "last_login", nullable = false)
+    private LocalDateTime lastLogin;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
