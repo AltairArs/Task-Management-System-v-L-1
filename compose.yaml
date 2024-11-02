@@ -1,13 +1,22 @@
 services:
-  postgres:
+  task-management-system-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres-service
+      - redis-service
+  postgres-service:
     image: 'postgres:latest'
     environment:
       - 'POSTGRES_DB=taskManagementSystemDB'
       - 'POSTGRES_PASSWORD=postgres'
       - 'POSTGRES_USER=postgres'
     ports:
-      - '5432'
-  redis:
+      - '5432:5432'
+  redis-service:
     image: 'redis:latest'
     ports:
-      - '6379'
+      - '6379:6379'
