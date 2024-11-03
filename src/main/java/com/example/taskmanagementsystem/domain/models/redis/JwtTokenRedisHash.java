@@ -1,8 +1,6 @@
 package com.example.taskmanagementsystem.domain.models.redis;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
@@ -10,6 +8,8 @@ import org.springframework.data.redis.core.TimeToLive;
 @Getter
 @Setter
 @AllArgsConstructor
+@Builder
+@NoArgsConstructor
 @RedisHash("jwt_token")
 public class JwtTokenRedisHash {
     @Id

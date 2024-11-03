@@ -32,18 +32,18 @@ public class JwtServiceImpl implements JwtService {
     private long jwtRefreshExpiration;
 
     private String generateToken(UserDetails userDetails, long jwtExpiration, String tokenType){
-        HashMap<String, Object> claims = new HashMap<>();
+        Map<String, Object> claims = new HashMap<>();
         Date createdAt = new Date();
         if (userDetails instanceof UserEntity customUserDetails) {
             claims.put("email", customUserDetails.getEmail());
-            claims.put("role", customUserDetails.getRole());
+            claims.put("role", customUserDetails.getRole().name());
             claims.put("tokenType", tokenType);
             claims.put("expires", createdAt.toInstant().plus(jwtExpiration, ChronoUnit.SECONDS));
         }
         return tokenise(claims);
     }
 
-    private String tokenise(HashMap<String, Object> claims){
+    private String tokenise(Map<String, Object> claims){
         try {
             Algorithm algorithm = Algorithm.HMAC256(jwtSigningKey);
             return JWT.create().withPayload(claims).sign(algorithm);
@@ -72,22 +72,26 @@ public class JwtServiceImpl implements JwtService {
     public JwtAuthenticationResponse generateTokenResponse(UserEntity user) {
         String accessToken = generateAccessToken(user);
         String refreshToken = generateRefreshToken(user);
-        jwtTokenRepository.save(new JwtTokenRedisHash(
-                accessToken,
-                jwtExpiration,
-                user.getEmail(),
-                "ACCESS"
-        ));
-        jwtTokenRepository.save(new JwtTokenRedisHash(
-                refreshToken,
-                jwtRefreshExpiration,
-                user.getEmail(),
-                "REFRESH"
-        ));
-        return new JwtAuthenticationResponse(
-                accessToken,
-                refreshToken
+        jwtTokenRepository.save(
+                JwtTokenRedisHash.builder()
+                        .token(accessToken)
+                        .expiration(jwtExpiration)
+                        .userEmail(user.getEmail())
+                        .tokenType("ACCESS")
+                        .build()
         );
+        jwtTokenRepository.save(
+                JwtTokenRedisHash.builder()
+                        .token(refreshToken)
+                        .expiration(jwtRefreshExpiration)
+                        .userEmail(user.getEmail())
+                        .tokenType("REFRESH")
+                        .build()
+        );
+        return JwtAuthenticationResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 
     private Map<String, Claim> getPayload(String token){

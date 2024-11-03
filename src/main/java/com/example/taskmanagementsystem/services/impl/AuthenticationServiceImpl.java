@@ -35,10 +35,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (userRepository.existsByEmail(request.getEmail())){
             throw new AccessDeniedException("User with this email already exists");
         }
-        UserEntity userEntity = new UserEntity();
-        userEntity.setLastLogin(userEntity.getCreatedAt());
-        userEntity.setEmail(request.getEmail());
-        userEntity.setPassword(passwordEncoderService.getPasswordEncoder().encode(request.getPassword()));
+        UserEntity userEntity = UserEntity.builder()
+                .email(request.getEmail())
+                .password(passwordEncoderService.getPasswordEncoder().encode(request.getPassword()))
+                .build();
         if (userRepository.countAll() == 0){
             userEntity.setRole(UserRoleEnum.ADMIN);
         }

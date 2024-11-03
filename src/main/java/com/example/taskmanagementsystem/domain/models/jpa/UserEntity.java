@@ -2,8 +2,7 @@ package com.example.taskmanagementsystem.domain.models.jpa;
 
 import com.example.taskmanagementsystem.enums.UserRoleEnum;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,7 +16,10 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "user_entity")
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserEntity implements UserDetails {
     @Id
     @Column(name = "email", nullable = false)
@@ -26,18 +28,21 @@ public class UserEntity implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private UserRoleEnum role = UserRoleEnum.USER;
 
+    @Builder.Default
     @CreatedDate
     @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm", iso = DateTimeFormat.ISO.DATE_TIME)
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Builder.Default
     @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm", iso = DateTimeFormat.ISO.DATE_TIME)
     @Column(name = "last_login", nullable = false)
-    private LocalDateTime lastLogin;
+    private LocalDateTime lastLogin = LocalDateTime.now();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

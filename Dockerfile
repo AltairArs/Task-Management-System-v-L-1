@@ -1,4 +1,4 @@
-FROM maven:3.9.9-eclipse-temurin-21 as builder
+FROM maven:3.9.9-eclipse-temurin-21 AS builder
 WORKDIR /app
 COPY . /app/.
 RUN mvn -f /app/pom.xml clean package -Dmaven.test.skip=true
