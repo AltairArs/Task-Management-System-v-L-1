@@ -58,7 +58,12 @@ public class SpringSecurityConfiguration {
                                 "/api/v1/accounts/login/",
                                 "/api/v1/accounts/logout/",
                                 "/api/v1/accounts/register/",
-                                "/api/v1/accounts/refresh-token/"
+                                "/api/v1/accounts/refresh-token/",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v1/api-docs/",
+                                "/v2/api-docs/",
+                                "/v3/api-docs/**"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
