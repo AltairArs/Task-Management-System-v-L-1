@@ -18,6 +18,7 @@
 | Приложение | 8080 |
 | Redis      | 6379 |
 | PostgreSQL | 5432 |
+
 Первый запуск (команды выполняются в директории с `compose.yaml`)
 ```
 docker compose up --build
