@@ -19,6 +19,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -52,7 +54,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 request.getEmail(),
                 request.getPassword()
         ));
-        return jwtService.generateTokenResponse(userService.getUser(request.getEmail()));
+        UserEntity user = userService.getUser(request.getEmail());
+        user.setLastLogin(LocalDateTime.now());
+        return jwtService.generateTokenResponse(user);
     }
 
     @Override

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1730738229935-1" author="Сергей">
+        <createTable tableName="comment_entity">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_comment_entity"/>
+            </column>
+            <column name="task_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="body" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="writted_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1730738229935-2" author="Сергей">
+        <createTable tableName="task_entity">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_task_entity"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_list_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_progress" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent_task_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1730738229935-3" author="Сергей">
+        <createTable tableName="task_list_entity">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_task_list_entity"/>
+            </column>
+            <column name="owner_email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1730738229935-4" author="Сергей">
+        <createTable tableName="task_list_members_entity">
+            <column name="user_email" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_task_list_members_entity"/>
+            </column>
+            <column name="task_list_id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_task_list_members_entity"/>
+            </column>
+            <column name="role" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1730738229935-5" author="Сергей">
+        <createTable tableName="user_entity">
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_entity"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_login" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1730738229935-6" author="Сергей">
+        <addForeignKeyConstraint baseColumnNames="author_email" baseTableName="comment_entity"
+                                 constraintName="FK_COMMENT_ENTITY_ON_AUTHOR_EMAIL" referencedColumnNames="email"
+                                 referencedTableName="user_entity"/>
+    </changeSet>
+    <changeSet id="1730738229935-7" author="Сергей">
+        <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="comment_entity"
+                                 constraintName="FK_COMMENT_ENTITY_ON_TASK" referencedColumnNames="id"
+                                 referencedTableName="task_entity"/>
+    </changeSet>
+    <changeSet id="1730738229935-8" author="Сергей">
+        <addForeignKeyConstraint baseColumnNames="parent_task_id" baseTableName="task_entity"
+                                 constraintName="FK_TASK_ENTITY_ON_PARENT_TASK" referencedColumnNames="id"
+                                 referencedTableName="task_entity"/>
+    </changeSet>
+    <changeSet id="1730738229935-9" author="Сергей">
+        <addForeignKeyConstraint baseColumnNames="task_list_id" baseTableName="task_entity"
+                                 constraintName="FK_TASK_ENTITY_ON_TASK_LIST" referencedColumnNames="id"
+                                 referencedTableName="task_list_entity"/>
+    </changeSet>
+    <changeSet id="1730738229935-10" author="Сергей">
+        <addForeignKeyConstraint baseColumnNames="owner_email" baseTableName="task_list_entity"
+                                 constraintName="FK_TASK_LIST_ENTITY_ON_OWNER_EMAIL" referencedColumnNames="email"
+                                 referencedTableName="user_entity"/>
+    </changeSet>
+    <changeSet id="1730738229935-11" author="Сергей">
+        <addForeignKeyConstraint baseColumnNames="task_list_id" baseTableName="task_list_members_entity"
+                                 constraintName="FK_TASK_LIST_MEMBERS_ENTITY_ON_TASK_LIST" referencedColumnNames="id"
+                                 referencedTableName="task_list_entity"/>
+    </changeSet>
+    <changeSet id="1730738229935-12" author="Сергей">
+        <addForeignKeyConstraint baseColumnNames="user_email" baseTableName="task_list_members_entity"
+                                 constraintName="FK_TASK_LIST_MEMBERS_ENTITY_ON_USER_EMAIL"
+                                 referencedColumnNames="email" referencedTableName="user_entity"/>
+    </changeSet>
+
+</databaseChangeLog>
