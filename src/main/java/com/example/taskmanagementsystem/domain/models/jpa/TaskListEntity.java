@@ -35,4 +35,11 @@ public class TaskListEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumns({
+            @JoinColumn(name = "type_owner_email", referencedColumnName = "owner_email"),
+            @JoinColumn(name = "type_name", referencedColumnName = "name")
+    })
+    private TaskTypeEntity taskType;
+
 }

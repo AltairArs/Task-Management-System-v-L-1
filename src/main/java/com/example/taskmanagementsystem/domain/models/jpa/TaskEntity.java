@@ -2,6 +2,7 @@ package com.example.taskmanagementsystem.domain.models.jpa;
 
 import com.example.taskmanagementsystem.enums.TaskProgressEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
 import java.util.LinkedHashSet;
@@ -44,5 +45,19 @@ public class TaskEntity {
     @Builder.Default
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CommentEntity> comments = new LinkedHashSet<>();
+
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
+    @Min(message = "Номер не может быть меньше 1", value = 1)
+    @Column(name = "number", nullable = false)
+    private Integer number;
+
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumns({
+            @JoinColumn(name = "type_owner_email", referencedColumnName = "owner_email"),
+            @JoinColumn(name = "type_name", referencedColumnName = "name")
+    })
+    private TaskTypeEntity taskType;
 
 }
