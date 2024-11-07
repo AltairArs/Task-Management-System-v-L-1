@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
@@ -94,7 +95,7 @@ public class JwtServiceImpl implements JwtService {
                 .build();
     }
 
-    private Map<String, Claim> getPayload(String token){
+    private Map<String, Claim> getPayload(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(jwtSigningKey);
             return JWT.require(algorithm).build().verify(token).getClaims();

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1731006015773-1" author="Сергей">
+        <createSequence incrementBy="50" sequenceName="comment_entity_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1731006015773-2" author="Сергей">
+        <createSequence incrementBy="50" sequenceName="task_entity_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1731006015773-3" author="Сергей">
+        <createSequence incrementBy="50" sequenceName="task_list_entity_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1731006015773-4" author="Сергей">
+        <createSequence incrementBy="50" sequenceName="task_list_member_entity_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1731006015773-5" author="Сергей">
+        <createSequence incrementBy="50" sequenceName="user_entity_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1731006015773-6" author="Сергей">
+        <createTable tableName="comment_entity">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_comment_entity"/>
+            </column>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1731006015773-7" author="Сергей">
+        <createTable tableName="task_entity">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_task_entity"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="task_progress_enum" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_list_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1731006015773-8" author="Сергей">
+        <createTable tableName="task_list_entity">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_task_list_entity"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1731006015773-9" author="Сергей">
+        <createTable tableName="task_list_member_entity">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_task_list_member_entity"/>
+            </column>
+            <column name="role" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_list_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1731006015773-10" author="Сергей">
+        <createTable tableName="user_entity">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_entity"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_login" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1731006015773-11" author="Сергей">
+        <addUniqueConstraint columnNames="name, owner_id" constraintName="uc_2658dad3aaa00669fd3a2b2f9"
+                             tableName="task_list_entity"/>
+    </changeSet>
+    <changeSet id="1731006015773-12" author="Сергей">
+        <addUniqueConstraint columnNames="email" constraintName="uc_user_entity_email" tableName="user_entity"/>
+    </changeSet>
+    <changeSet id="1731006015773-13" author="Сергей">
+        <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="comment_entity"
+                                 constraintName="FK_COMMENT_ENTITY_ON_TASK" referencedColumnNames="id"
+                                 referencedTableName="task_entity"/>
+    </changeSet>
+    <changeSet id="1731006015773-14" author="Сергей">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="comment_entity"
+                                 constraintName="FK_COMMENT_ENTITY_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="user_entity"/>
+    </changeSet>
+    <changeSet id="1731006015773-15" author="Сергей">
+        <addForeignKeyConstraint baseColumnNames="task_list_id" baseTableName="task_entity"
+                                 constraintName="FK_TASK_ENTITY_ON_TASK_LIST" referencedColumnNames="id"
+                                 referencedTableName="task_list_entity"/>
+    </changeSet>
+    <changeSet id="1731006015773-16" author="Сергей">
+        <addForeignKeyConstraint baseColumnNames="owner_id" baseTableName="task_list_entity"
+                                 constraintName="FK_TASK_LIST_ENTITY_ON_OWNER" referencedColumnNames="id"
+                                 referencedTableName="user_entity"/>
+    </changeSet>
+    <changeSet id="1731006015773-17" author="Сергей">
+        <addForeignKeyConstraint baseColumnNames="task_list_id" baseTableName="task_list_member_entity"
+                                 constraintName="FK_TASK_LIST_MEMBER_ENTITY_ON_TASK_LIST" referencedColumnNames="id"
+                                 referencedTableName="task_list_entity"/>
+    </changeSet>
+    <changeSet id="1731006015773-18" author="Сергей">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="task_list_member_entity"
+                                 constraintName="FK_TASK_LIST_MEMBER_ENTITY_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="user_entity"/>
+    </changeSet>
+
+</databaseChangeLog>

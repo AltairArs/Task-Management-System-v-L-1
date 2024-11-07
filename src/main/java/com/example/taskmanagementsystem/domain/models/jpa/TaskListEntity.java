@@ -5,23 +5,30 @@ import lombok.*;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "task_list_entity")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Table(
+        name = "task_list_entity",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"name", "owner_id"})
+        }
+)
 public class TaskListEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private UUID id;
+    private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "owner_email", nullable = false)
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_id")
     private UserEntity owner;
 
     @Builder.Default
@@ -31,15 +38,5 @@ public class TaskListEntity {
     @Builder.Default
     @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TaskListMemberEntity> members = new LinkedHashSet<>();
-
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumns({
-            @JoinColumn(name = "type_owner_email", referencedColumnName = "owner_email"),
-            @JoinColumn(name = "type_name", referencedColumnName = "name")
-    })
-    private TaskTypeEntity taskType;
 
 }

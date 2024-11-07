@@ -19,12 +19,16 @@ import java.util.Set;
 @Setter
 @Entity
 @Builder
-@Table(name = "user_entity")
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "user_entity")
 public class UserEntity implements UserDetails {
     @Id
-    @Column(name = "email", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -43,7 +47,7 @@ public class UserEntity implements UserDetails {
 
     @Builder.Default
     @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm", iso = DateTimeFormat.ISO.DATE_TIME)
-    @Column(name = "last_login", nullable = false)
+    @Column(name = "last_login")
     private LocalDateTime lastLogin = LocalDateTime.now();
 
     @Builder.Default
@@ -51,16 +55,12 @@ public class UserEntity implements UserDetails {
     private Set<TaskListEntity> taskLists = new LinkedHashSet<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CommentEntity> comments = new LinkedHashSet<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TaskListMemberEntity> taskListsAsMember = new LinkedHashSet<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<TaskTypeEntity> taskTypes = new LinkedHashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -30,9 +30,4 @@ public class ErrorResponse {
                         .collect(Collectors.toList()))
                 .build();
     }
-    public static ErrorResponse fromString(String s){
-        return ErrorResponse.builder()
-                .globalErrors(List.of(s))
-                .build();
-    }
 }

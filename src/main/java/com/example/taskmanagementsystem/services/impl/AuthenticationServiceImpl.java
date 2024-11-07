@@ -41,7 +41,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoderService.getPasswordEncoder().encode(request.getPassword()))
                 .build();
-        if (userRepository.countAll() == 0){
+        if (userRepository.count() == 0){
             userEntity.setRole(UserRoleEnum.ADMIN);
         }
         userRepository.save(userEntity);
@@ -56,6 +56,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         ));
         UserEntity user = userService.getUser(request.getEmail());
         user.setLastLogin(LocalDateTime.now());
+        userRepository.save(user);
         return jwtService.generateTokenResponse(user);
     }
 

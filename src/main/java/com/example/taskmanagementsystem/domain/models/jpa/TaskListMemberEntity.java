@@ -1,6 +1,5 @@
 package com.example.taskmanagementsystem.domain.models.jpa;
 
-import com.example.taskmanagementsystem.domain.models.pk.TaskListMemberPrimaryKey;
 import com.example.taskmanagementsystem.enums.TaskListMemberRoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,24 +7,27 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "task_list_members_entity")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@IdClass(TaskListMemberPrimaryKey.class)
+@Table(name = "task_list_member_entity")
 public class TaskListMemberEntity {
     @Id
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    private UserEntity user;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-    @Id
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false, length = 20)
+    private TaskListMemberRoleEnum role = TaskListMemberRoleEnum.VIEWER;
+
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "task_list_id", nullable = false)
     private TaskListEntity taskList;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false, length = 20)
-    @Builder.Default
-    private TaskListMemberRoleEnum role = TaskListMemberRoleEnum.VIEWER;
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 
 }
