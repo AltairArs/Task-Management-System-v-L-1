@@ -63,8 +63,12 @@ public class SpringSecurityConfiguration {
                                 "/swagger-ui.html",
                                 "/v1/api-docs/",
                                 "/v2/api-docs/",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/api/v1/users/current/"
                         ).permitAll()
+                        .requestMatchers(
+                                "/api/v1/users/**"
+                        ).hasAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authenticationProvider(authenticationProvider())

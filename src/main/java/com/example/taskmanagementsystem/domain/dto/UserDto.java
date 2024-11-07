@@ -1,0 +1,24 @@
+package com.example.taskmanagementsystem.domain.dto;
+
+import com.example.taskmanagementsystem.enums.UserRoleEnum;
+import lombok.*;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+/**
+ * DTO for {@link com.example.taskmanagementsystem.domain.models.jpa.UserEntity}
+ */
+@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class UserDto implements Serializable {
+    private Long id;
+    private String email;
+    private UserRoleEnum role;
+    private LocalDateTime createdAt;
+    private LocalDateTime lastLogin;
+}

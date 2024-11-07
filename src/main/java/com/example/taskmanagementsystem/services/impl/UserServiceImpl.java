@@ -7,6 +7,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,5 +19,16 @@ public class UserServiceImpl implements UserService {
     public UserEntity getUser(String email) {
         Optional<UserEntity> optionalUserEntity = userRepository.getByEmail(email);
         return optionalUserEntity.orElseThrow(()-> new EntityNotFoundException("Cannot find user with this email: " + email));
+    }
+
+    @Override
+    public List<UserEntity> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public UserEntity getUserById(long id) {
+        Optional<UserEntity> optionalUserEntity = userRepository.getById(id);
+        return optionalUserEntity.orElseThrow(()-> new EntityNotFoundException("Cannot find user with id"));
     }
 }
