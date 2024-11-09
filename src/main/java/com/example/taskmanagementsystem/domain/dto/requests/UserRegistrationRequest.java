@@ -17,6 +17,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @FieldsAreEqual(
         fields = {
                 "password",

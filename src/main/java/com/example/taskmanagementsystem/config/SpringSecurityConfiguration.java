@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -63,9 +64,11 @@ public class SpringSecurityConfiguration {
                                 "/swagger-ui.html",
                                 "/v1/api-docs/",
                                 "/v2/api-docs/",
-                                "/v3/api-docs/**",
-                                "/api/v1/users/current/"
+                                "/v3/api-docs/**"
                         ).permitAll()
+                        .requestMatchers(
+                                "/api/v1/users/current/"
+                        ).fullyAuthenticated()
                         .requestMatchers(
                                 "/api/v1/users/**"
                         ).hasAuthority("ADMIN")

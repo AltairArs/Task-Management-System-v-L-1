@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
-    @Operation(summary = "Регистрация пользователей")
+    @Operation(summary = "Регистрация пользователей и выдача токенов")
     @PostMapping("register/")
     public ResponseEntity<?> register(@RequestBody @Valid UserRegistrationRequest request, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
@@ -34,7 +34,7 @@ public class AuthenticationController {
         }
     }
 
-    @Operation(summary = "Аутентификация/вход пользователей")
+    @Operation(summary = "Аутентификация/вход пользователей и выдача токенов")
     @PostMapping("login/")
     public ResponseEntity<?> login(@RequestBody @Valid UserLoginRequest request, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
@@ -44,7 +44,7 @@ public class AuthenticationController {
         }
     }
 
-    @Operation(summary = "Обновление JWT-токена")
+    @Operation(summary = "Обновление JWT-токенов")
     @PostMapping("refresh-token/")
     public ResponseEntity<?> refreshToken(@RequestBody @Valid RefreshJwtTokenRequest request){
         return ResponseEntity.ok(authenticationService.refreshToken(request));

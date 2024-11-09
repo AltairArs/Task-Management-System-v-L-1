@@ -1,7 +1,9 @@
 package com.example.taskmanagementsystem.services.impl;
 
+import com.example.taskmanagementsystem.domain.dto.requests.UserUpdateRequest;
 import com.example.taskmanagementsystem.domain.models.jpa.UserEntity;
 import com.example.taskmanagementsystem.repo.UserRepository;
+import com.example.taskmanagementsystem.services.PasswordEncoderService;
 import com.example.taskmanagementsystem.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoderService passwordEncoderService;
 
     @Override
     public UserEntity getUser(String email) {
@@ -30,5 +33,17 @@ public class UserServiceImpl implements UserService {
     public UserEntity getUserById(long id) {
         Optional<UserEntity> optionalUserEntity = userRepository.getById(id);
         return optionalUserEntity.orElseThrow(()-> new EntityNotFoundException("Cannot find user with id"));
+    }
+
+    @Override
+    public UserEntity updateUser(UserEntity user, UserUpdateRequest userUpdateRequest) {
+        user.setPassword(passwordEncoderService.getPasswordEncoder().encode(userUpdateRequest.getPassword()));
+        userRepository.save(user);
+        return user;
+    }
+
+    @Override
+    public void deleteUser(long id) {
+        userRepository.deleteById(id);
     }
 }
