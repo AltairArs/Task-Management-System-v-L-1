@@ -68,7 +68,8 @@ public class SpringSecurityConfiguration {
                         ).permitAll()
                         .requestMatchers(
                                 "/api/v1/users/current/",
-                                "/api/v1/task-lists/**"
+                                "/api/v1/task-lists/**",
+                                "/api/v1/tasks/**"
                         ).fullyAuthenticated()
                         .requestMatchers(
                                 "/api/v1/users/**"

@@ -25,7 +25,7 @@ public class TaskController {
     }
 
     @PostMapping("{taskListId:[0-9]+}/")
-    @PreAuthorize("@AccessService.canEditTaskList(principal, #id)")
+    @PreAuthorize("@AccessService.canEditTaskList(principal, #taskListId)")
     public ResponseEntity<?> addTask(@PathVariable long taskListId, @RequestBody @Valid TaskCreateRequest request) {
         return ResponseEntity.ok(taskMapper.mapToDto(taskService.createTask(taskListId, request)));
     }
