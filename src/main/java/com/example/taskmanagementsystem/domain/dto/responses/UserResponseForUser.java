@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserResponse implements Serializable {
+public class UserResponseForUser implements Serializable {
     String email;
     UserRoleEnum role;
     LocalDateTime createdAt;
