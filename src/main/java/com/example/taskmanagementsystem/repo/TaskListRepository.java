@@ -9,4 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface TaskListRepository extends JpaRepository<TaskListEntity, Long> {
+    boolean existsByNameAndOwner(String taskListName, UserEntity owner);
 }
