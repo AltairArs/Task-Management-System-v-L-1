@@ -2,6 +2,8 @@ package com.example.taskmanagementsystem.controllers;
 
 import com.example.taskmanagementsystem.domain.dto.requests.UserUpdateRequest;
 import com.example.taskmanagementsystem.domain.dto.responses.ErrorResponse;
+import com.example.taskmanagementsystem.domain.mappers.impl.CommentMapper;
+import com.example.taskmanagementsystem.domain.mappers.impl.TaskListMapper;
 import com.example.taskmanagementsystem.domain.mappers.impl.UserMapper;
 import com.example.taskmanagementsystem.domain.models.jpa.UserEntity;
 import com.example.taskmanagementsystem.enums.UserRoleEnum;
@@ -26,6 +28,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
+    private final CommentMapper commentMapper;
+    private final TaskListMapper taskListMapper;
 
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "Все пользователи")
@@ -46,6 +50,26 @@ public class UserController {
     @GetMapping("current/")
     public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal UserEntity user) {
         return ResponseEntity.ok(userMapper.mapToDto(user));
+    }
+
+    @GetMapping("{id:[0-9]+}/comments")
+    public ResponseEntity<?> getUserComments(@PathVariable long id) {
+        return ResponseEntity.ok(userService.getUserById(id).getComments().stream().map(commentMapper::mapToDto).toList());
+    }
+
+    @GetMapping("current/comments/")
+    public ResponseEntity<?> getCurrentUserComments(@AuthenticationPrincipal UserEntity user) {
+        return ResponseEntity.ok(user.getComments().stream().map(commentMapper::mapToDto).toList());
+    }
+
+    @GetMapping("{id:[0-9]+}/task-lists")
+    public ResponseEntity<?> getUserTaskLists(@PathVariable long id) {
+        return ResponseEntity.ok(userService.getUserById(id).getAllTaskLists().stream().map(taskListMapper::mapToDto).toList());
+    }
+
+    @GetMapping("current/task-lists/")
+    public ResponseEntity<?> getCurrentUserTaskLists(@AuthenticationPrincipal UserEntity user) {
+        return ResponseEntity.ok(user.getAllTaskLists().stream().map(taskListMapper::mapToDto).toList());
     }
 
     @SecurityRequirement(name = "JWT")

@@ -3,6 +3,7 @@ package com.example.taskmanagementsystem.domain.models.jpa;
 import com.example.taskmanagementsystem.enums.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +15,7 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -90,5 +92,9 @@ public class UserEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public List<TaskListEntity> getAllTaskLists(){
+        return Stream.concat(getTaskLists().stream(), getTaskListsAsMember().stream().map(TaskListMemberEntity::getTaskList)).toList();
     }
 }
