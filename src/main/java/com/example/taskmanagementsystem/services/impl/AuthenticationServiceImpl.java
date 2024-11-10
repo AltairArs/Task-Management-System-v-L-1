@@ -7,6 +7,7 @@ import com.example.taskmanagementsystem.domain.dto.responses.JwtAuthenticationRe
 import com.example.taskmanagementsystem.domain.models.jpa.UserEntity;
 import com.example.taskmanagementsystem.domain.models.redis.JwtTokenRedisHash;
 import com.example.taskmanagementsystem.enums.UserRoleEnum;
+import com.example.taskmanagementsystem.exceptions.TaskManagementException;
 import com.example.taskmanagementsystem.repo.JwtTokenRepository;
 import com.example.taskmanagementsystem.repo.UserRepository;
 import com.example.taskmanagementsystem.services.AuthenticationService;
@@ -14,7 +15,6 @@ import com.example.taskmanagementsystem.services.JwtService;
 import com.example.taskmanagementsystem.services.PasswordEncoderService;
 import com.example.taskmanagementsystem.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -35,7 +35,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public JwtAuthenticationResponse register(UserRegistrationRequest request) {
         if (userRepository.existsByEmail(request.getEmail())){
-            throw new AccessDeniedException("User with this email already exists");
+            throw new TaskManagementException("User with this email already exists: " + request.getEmail());
         }
         UserEntity userEntity = UserEntity.builder()
                 .email(request.getEmail())
@@ -64,13 +64,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public JwtAuthenticationResponse refreshToken(RefreshJwtTokenRequest request) {
         String oldRefreshToken = request.getRefreshToken();
         JwtTokenRedisHash tokenRedisHash = jwtTokenRepository.getByToken(oldRefreshToken)
-                .orElseThrow(() -> new AccessDeniedException("Token is invalid pr expired"));
+                .orElseThrow(() -> new TaskManagementException("Token is invalid pr expired"));
         if (!tokenRedisHash.getTokenType().equals("REFRESH")){
-            throw new AccessDeniedException("Invalid token type, expected REFRESH, found: " + tokenRedisHash.getTokenType());
+            throw new TaskManagementException("Invalid token type, expected REFRESH, found: " + tokenRedisHash.getTokenType());
         }
         String email = jwtService.extract(tokenRedisHash.getToken(), "email");
         if (email == null){
-            throw new AccessDeniedException("Provided token is invalid");
+            throw new TaskManagementException("Provided token is invalid");
         }
         jwtTokenRepository.deleteAllByUserEmail(email);
         return jwtService.generateTokenResponse(userService.getUser(email));

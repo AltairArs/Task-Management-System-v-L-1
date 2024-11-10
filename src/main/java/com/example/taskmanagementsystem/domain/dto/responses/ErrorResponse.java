@@ -1,5 +1,6 @@
 package com.example.taskmanagementsystem.domain.dto.responses;
 
+import com.example.taskmanagementsystem.exceptions.TaskManagementException;
 import lombok.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -28,6 +29,12 @@ public class ErrorResponse {
                 .globalErrors(bindingResult.getGlobalErrors().stream()
                         .map(err -> Objects.requireNonNullElse(err.getDefaultMessage(), ""))
                         .collect(Collectors.toList()))
+                .build();
+    }
+
+    public static ErrorResponse fromString(String str){
+        return ErrorResponse.builder()
+                .globalErrors(List.of(str))
                 .build();
     }
 }

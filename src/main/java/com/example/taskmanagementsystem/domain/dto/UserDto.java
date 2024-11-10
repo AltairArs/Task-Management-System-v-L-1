@@ -1,4 +1,4 @@
-package com.example.taskmanagementsystem.domain.dto.responses;
+package com.example.taskmanagementsystem.domain.dto;
 
 import com.example.taskmanagementsystem.enums.UserRoleEnum;
 import lombok.*;
@@ -15,7 +15,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserResponseForUser implements Serializable {
+public class UserDto implements Serializable {
+    Long id;
     String email;
     UserRoleEnum role;
     LocalDateTime createdAt;
