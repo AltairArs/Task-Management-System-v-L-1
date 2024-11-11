@@ -9,8 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Schema(description = "Запрос на создание комментария")
+@Schema(description = "Запрос на создание комментария", requiredProperties = {"content"})
 public class CommentCreateRequest {
-    @Schema(description = "Содержание комментария")
+    @Schema(description = "Содержание комментария", example = "Example")
     String content;
 }
