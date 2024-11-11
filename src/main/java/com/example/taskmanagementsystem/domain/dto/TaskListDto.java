@@ -1,5 +1,6 @@
 package com.example.taskmanagementsystem.domain.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serializable;
@@ -13,8 +14,12 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Schema(description = "Отображение списка задач")
 public class TaskListDto implements Serializable {
+    @Schema(description = "id списка задач")
     Long id;
+    @Schema(description = "Название списка задач")
     String name;
+    @Schema(description = "Владелец списка задач")
     UserDto owner;
 }

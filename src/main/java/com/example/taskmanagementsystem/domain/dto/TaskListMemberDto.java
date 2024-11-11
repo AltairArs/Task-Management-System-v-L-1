@@ -1,6 +1,7 @@
 package com.example.taskmanagementsystem.domain.dto;
 
 import com.example.taskmanagementsystem.enums.TaskListMemberRoleEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serializable;
@@ -14,8 +15,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Schema(description = "Отображение участника")
 public class TaskListMemberDto implements Serializable {
     Long id;
+    @Schema(description = "Роль участника")
     TaskListMemberRoleEnum role;
+    @Schema(description = "Участник")
     UserDto user;
 }
