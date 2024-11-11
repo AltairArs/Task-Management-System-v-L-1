@@ -1,5 +1,6 @@
 package com.example.taskmanagementsystem.domain.dto.requests;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 @Data
@@ -8,6 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Schema(description = "Запрос на создание комментария")
 public class CommentCreateRequest {
+    @Schema(description = "Содержание комментария")
     String content;
 }

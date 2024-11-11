@@ -9,6 +9,7 @@ import com.example.taskmanagementsystem.domain.models.jpa.UserEntity;
 import com.example.taskmanagementsystem.enums.UserRoleEnum;
 import com.example.taskmanagementsystem.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -41,7 +42,7 @@ public class UserController {
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "Получить пользователя")
     @GetMapping("{id:[0-9]+}/")
-    public ResponseEntity<?> getUserById(@PathVariable long id) {
+    public ResponseEntity<?> getUserById(@Parameter(description = "id пользователя", example = "123") @PathVariable long id) {
         return ResponseEntity.ok(userMapper.mapToDto(userService.getUserById(id)));
     }
 
@@ -52,21 +53,29 @@ public class UserController {
         return ResponseEntity.ok(userMapper.mapToDto(user));
     }
 
+    @SecurityRequirement(name = "JWT")
+    @Operation(summary = "Получить комментарии, за авторством пользователя")
     @GetMapping("{id:[0-9]+}/comments")
-    public ResponseEntity<?> getUserComments(@PathVariable long id) {
+    public ResponseEntity<?> getUserComments(@Parameter(description = "id пользователя", example = "123") @PathVariable long id) {
         return ResponseEntity.ok(userService.getUserById(id).getComments().stream().map(commentMapper::mapToDto).toList());
     }
 
+    @SecurityRequirement(name = "JWT")
+    @Operation(summary = "Получить комментарии, за авторством текущего пользователя")
     @GetMapping("current/comments/")
     public ResponseEntity<?> getCurrentUserComments(@AuthenticationPrincipal UserEntity user) {
         return ResponseEntity.ok(user.getComments().stream().map(commentMapper::mapToDto).toList());
     }
 
+    @SecurityRequirement(name = "JWT")
+    @Operation(summary = "Получить списка задач пользователя")
     @GetMapping("{id:[0-9]+}/task-lists")
-    public ResponseEntity<?> getUserTaskLists(@PathVariable long id) {
+    public ResponseEntity<?> getUserTaskLists(@Parameter(description = "id пользователя", example = "123") @PathVariable long id) {
         return ResponseEntity.ok(userService.getUserById(id).getAllTaskLists().stream().map(taskListMapper::mapToDto).toList());
     }
 
+    @SecurityRequirement(name = "JWT")
+    @Operation(summary = "Получить списки задач текущего пользователя")
     @GetMapping("current/task-lists/")
     public ResponseEntity<?> getCurrentUserTaskLists(@AuthenticationPrincipal UserEntity user) {
         return ResponseEntity.ok(user.getAllTaskLists().stream().map(taskListMapper::mapToDto).toList());
@@ -82,7 +91,7 @@ public class UserController {
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "Удаление пользователя")
     @DeleteMapping("{id:[0-9]+}/")
-    public ResponseEntity<?> deleteUser(@PathVariable long id) {
+    public ResponseEntity<?> deleteUser(@Parameter(description = "id пользователя", example = "123") @PathVariable long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok().build();
     }

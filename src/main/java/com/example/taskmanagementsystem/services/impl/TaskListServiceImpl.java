@@ -21,7 +21,6 @@ public class TaskListServiceImpl implements TaskListService {
     private final TaskListRepository taskListRepository;
     private final TaskListMemberRepository taskListMemberRepository;
     private final UserService userService;
-    private final TaskListService taskListService;
 
     @Override
     public TaskListEntity getTaskListById(long id) {

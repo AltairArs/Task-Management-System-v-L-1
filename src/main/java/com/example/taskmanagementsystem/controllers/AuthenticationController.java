@@ -5,6 +5,7 @@ import com.example.taskmanagementsystem.domain.dto.requests.UserLoginRequest;
 import com.example.taskmanagementsystem.domain.dto.requests.UserRegistrationRequest;
 import com.example.taskmanagementsystem.services.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class AuthenticationController {
 
     @Operation(summary = "Обновление JWT-токенов")
     @PostMapping("refresh-token/")
+    @SecurityRequirement(name = "JWT")
     public ResponseEntity<?> refreshToken(@RequestBody @Valid RefreshJwtTokenRequest request){
         return ResponseEntity.ok(authenticationService.refreshToken(request));
     }
