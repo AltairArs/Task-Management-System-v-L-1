@@ -31,12 +31,11 @@ public class TaskEntity {
     @Column(name = "task_progress_enum", nullable = false, length = 20)
     private TaskProgressEnum taskProgress = TaskProgressEnum.NOT_STARTED;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "task_list_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.MERGE, optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
     private TaskListEntity taskList;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "task", cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<CommentEntity> comments = new LinkedHashSet<>();
 
 }

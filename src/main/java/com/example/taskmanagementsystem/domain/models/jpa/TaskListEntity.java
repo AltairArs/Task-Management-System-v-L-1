@@ -27,16 +27,16 @@ public class TaskListEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id")
     private UserEntity owner;
 
     @Builder.Default
-    @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "taskList", cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<TaskEntity> tasks = new LinkedHashSet<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "taskList", cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<TaskListMemberEntity> members = new LinkedHashSet<>();
 
 }

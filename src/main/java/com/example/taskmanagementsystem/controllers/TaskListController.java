@@ -48,7 +48,7 @@ public class TaskListController {
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "Получить список задач")
     @GetMapping("{id:[0-9]+}/")
-    @PreAuthorize("@AccessService.canSeeTaskList(principal, #id)")
+    @PreAuthorize("@accessService.canSeeTaskList(principal, #id)")
     public ResponseEntity<?> getTaskListById(@Parameter(description = "id списка задач", example = "123") @PathVariable long id) {
         return ResponseEntity.ok(taskListMapper.mapToDto(taskListService.getTaskListById(id)));
     }
@@ -56,7 +56,7 @@ public class TaskListController {
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "Получить задачи в списке")
     @GetMapping("{id:[0-9]+}/tasks/")
-    @PreAuthorize("@AccessService.canSeeTaskList(principal, #id)")
+    @PreAuthorize("@accessService.canSeeTaskList(principal, #id)")
     public ResponseEntity<?> getTaskListTasks(@Parameter(description = "id списка задач", example = "123") @PathVariable long id) {
         return ResponseEntity.ok(taskListService.getTaskListById(id).getTasks().stream().map(taskMapper::mapToDto).toList());
     }
@@ -64,7 +64,7 @@ public class TaskListController {
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "Получить список участников списка задач")
     @GetMapping("{id:[0-9]+}/members/")
-    @PreAuthorize("@AccessService.canSeeTaskList(principal, #id)")
+    @PreAuthorize("@accessService.canSeeTaskList(principal, #id)")
     public ResponseEntity<?> getTaskListMembers(@Parameter(description = "id списка задач", example = "123") @PathVariable long id) {
         return ResponseEntity.ok(taskListService.getTaskListById(id).getMembers().stream().map(taskListMemberMapper::mapToDto).toList());
     }
@@ -79,7 +79,7 @@ public class TaskListController {
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "Изменить список задач")
     @PutMapping("{id:[0-9]+}/")
-    @PreAuthorize("@AccessService.isOnwerTaskList(principal, #id)")
+    @PreAuthorize("@accessService.isOwnerTaskList(principal, #id)")
     public ResponseEntity<?> updateTaskList(@Parameter(description = "id списка задач", example = "123") @PathVariable long id, @RequestBody @Valid TaskListUpdateRequest request) {
         return ResponseEntity.ok(taskListMapper.mapToDto(taskListService.updateTaskList(id, request)));
     }
@@ -87,7 +87,7 @@ public class TaskListController {
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "Удалить список задач")
     @DeleteMapping("{id:[0-9]+}/")
-    @PreAuthorize("@AccessService.isOnwerTaskList(principal, #id)")
+    @PreAuthorize("@accessService.isOwnerTaskList(principal, #id)")
     public ResponseEntity<?> deleteTaskList(@Parameter(description = "id списка задач", example = "123") @PathVariable long id) {
         taskListService.deleteTaskList(id);
         return ResponseEntity.ok().build();
@@ -96,7 +96,7 @@ public class TaskListController {
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "Добавить участника к списку задач")
     @PostMapping("{id:[0-9]+}/members/")
-    @PreAuthorize("@AccessService.isOnwerTaskList(principal, #id)")
+    @PreAuthorize("@accessService.isOwnerTaskList(principal, #id)")
     public ResponseEntity<?> addMemberToTaskList(@Parameter(description = "id списка задач", example = "123") @PathVariable long id, @RequestBody @Valid MemberAddRequest request) {
         taskListService.addMember(id, request);
         return ResponseEntity.ok().build();
@@ -105,7 +105,7 @@ public class TaskListController {
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "Изменить роль участника")
     @PutMapping("{id:[0-9]+}/{userId:[0-9]+}/")
-    @PreAuthorize("@AccessService.isOnwerTaskList(principal, #id)")
+    @PreAuthorize("@accessService.isOwnerTaskList(principal, #id)")
     public ResponseEntity<?> updateTaskListMember(@Parameter(description = "id списка задач", example = "123") @PathVariable long id, @Parameter(description = "id участника", example = "123") @PathVariable long userId, @RequestBody @Valid MemberUpdateRoleRequest request) {
         taskListService.changeMemberRole(id, userId, request);
         return ResponseEntity.ok().build();
@@ -114,7 +114,7 @@ public class TaskListController {
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "Удалить участника")
     @DeleteMapping("{id:[0-9]+}/{userId:[0-9]+}/")
-    @PreAuthorize("@AccessService.isOnwerTaskList(principal, #id)")
+    @PreAuthorize("@accessService.isOwnerTaskList(principal, #id)")
     public ResponseEntity<?> deleteTaskListMember(@Parameter(description = "id списка задач", example = "123") @PathVariable long id, @Parameter(description = "id участника", example = "123") @PathVariable long userId) {
         taskListService.deleteMember(id, userId);
         return ResponseEntity.ok().build();

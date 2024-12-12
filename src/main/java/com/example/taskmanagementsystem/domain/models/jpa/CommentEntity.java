@@ -29,11 +29,11 @@ public class CommentEntity {
     @Column(name = "content", nullable = false, length = 1000)
     private String content;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.MERGE, optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "task_id", nullable = false)
     private TaskEntity task;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.MERGE, optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity owner;
 

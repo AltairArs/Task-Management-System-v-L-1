@@ -28,7 +28,7 @@ public class CommentController {
     @Operation(summary = "Получение комментария")
     @GetMapping("{id:[0-9]+}/")
     @SecurityRequirement(name = "JWT")
-    @PreAuthorize("@AccessService.canSeeComment(principal, #id)")
+    @PreAuthorize("@accessService.canSeeComments(principal, #id)")
     public ResponseEntity<?> getComment(@Parameter(description = "id комментария", example = "123") @PathVariable long id) {
         return ResponseEntity.ok(commentMapper.mapToDto(commentService.getComment(id)));
     }
@@ -36,7 +36,7 @@ public class CommentController {
     @Operation(summary = "Изменение комментария")
     @PutMapping("{id:[0-9]+}/")
     @SecurityRequirement(name = "JWT")
-    @PreAuthorize("@AccessService.canEditComment(principal, #id)")
+    @PreAuthorize("@accessService.canEditComments(principal, #id)")
     public ResponseEntity<?> updateComment(@Parameter(description = "id комментария", example = "123") @PathVariable long id, @RequestBody @Valid CommentUpdateRequest request) {
         return ResponseEntity.ok(commentMapper.mapToDto(commentService.updateComment(id, request)));
     }
@@ -44,7 +44,7 @@ public class CommentController {
     @Operation(summary = "Удаление комментария")
     @SecurityRequirement(name = "JWT")
     @DeleteMapping("{id:[0-9]+}/")
-    @PreAuthorize("@AccessService.canEditComment(principal, #id)")
+    @PreAuthorize("@accessService.canEditComments(principal, #id)")
     public ResponseEntity<?> deleteComment(@Parameter(description = "id комментария", example = "123") @PathVariable long id) {
         commentService.deleteComment(id);
         return ResponseEntity.ok().build();
@@ -53,7 +53,7 @@ public class CommentController {
     @Operation(summary = "Добавление комментария")
     @SecurityRequirement(name = "JWT")
     @PostMapping("{taskId:[0-9]+}/")
-    @PreAuthorize("@AccessService.canEditTask(principal, #taskId)")
+    @PreAuthorize("@accessService.canEditTask(principal, #taskId)")
     public ResponseEntity<?> createComment(@Parameter(description = "id задачи", example = "123") @PathVariable long taskId, @RequestBody @Valid CommentCreateRequest request) {
         return ResponseEntity.ok(commentMapper.mapToDto(commentService.createComment(taskId, request)));
     }

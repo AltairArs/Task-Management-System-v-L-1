@@ -1,9 +1,6 @@
 package com.example.taskmanagementsystem.services;
 
-import com.example.taskmanagementsystem.domain.models.jpa.CommentEntity;
-import com.example.taskmanagementsystem.domain.models.jpa.TaskEntity;
-import com.example.taskmanagementsystem.domain.models.jpa.TaskListEntity;
-import com.example.taskmanagementsystem.domain.models.jpa.UserEntity;
+import com.example.taskmanagementsystem.domain.models.jpa.*;
 import com.example.taskmanagementsystem.enums.TaskListMemberRoleEnum;
 import com.example.taskmanagementsystem.exceptions.TaskManagementException;
 import com.example.taskmanagementsystem.repo.CommentRepository;
@@ -12,6 +9,9 @@ import com.example.taskmanagementsystem.repo.TaskListRepository;
 import com.example.taskmanagementsystem.repo.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,19 +37,20 @@ public class AccessService {
 
     public boolean canSeeTaskList(UserEntity user, long taskListId) {
         TaskListEntity taskListEntity = getTaskListEntity(taskListId);
-        return taskListEntity.getOwner().equals(user) || taskListMemberRepository.findByTaskListAndUser(taskListEntity, user).isPresent();
+        return Objects.equals(taskListEntity.getOwner().getId(), user.getId()) || taskListMemberRepository.findByTaskListAndUser(taskListEntity, user).isPresent();
     }
 
     public boolean canEditTaskList(UserEntity user, long taskListId) {
         TaskListEntity taskListEntity = getTaskListEntity(taskListId);
-        return taskListEntity.getOwner().equals(user)
-                || taskListMemberRepository.findByTaskListAndUser(taskListEntity, user)
+        if (Objects.equals(taskListEntity.getOwner().getId(), user.getId()))
+            return true;
+        return taskListMemberRepository.findByTaskListAndUser(taskListEntity, user)
                 .orElseThrow(() -> new TaskManagementException("User is not member or owner")).getRole() == TaskListMemberRoleEnum.EDITOR;
     }
 
     public boolean isOwnerTaskList(UserEntity user, long taskListId) {
         TaskListEntity taskListEntity = getTaskListEntity(taskListId);
-        return taskListEntity.getOwner().equals(user);
+        return Objects.equals(taskListEntity.getOwner().getId(), user.getId());
     }
 
     public boolean canSeeTask(UserEntity user, long taskId) {

@@ -22,11 +22,11 @@ public class TaskListMemberEntity {
     @Column(name = "role", nullable = false, length = 20)
     private TaskListMemberRoleEnum role = TaskListMemberRoleEnum.VIEWER;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.MERGE, optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "task_list_id", nullable = false)
     private TaskListEntity taskList;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.MERGE, optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
